@@ -30,4 +30,9 @@ class VacancyLevel
         }
         return 'enough';
     }
+
+    public function __toString()
+    {
+        return $this->mark();
+    }
 }
