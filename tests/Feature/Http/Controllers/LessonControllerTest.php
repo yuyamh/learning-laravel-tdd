@@ -5,8 +5,10 @@ namespace Tests\Feature\Http\Controllers;
 use App\Models\Lesson;
 use App\Models\Reservation;
 use App\Models\User;
+use App\Models\UserProfile;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
+use Tests\Factories\Traits\CreatesUser;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -15,6 +17,7 @@ class LessonControllerTest extends TestCase
 {
 
     use RefreshDatabase;
+    use CreatesUser;
 
     /**
      * @param int $capacity
@@ -29,10 +32,11 @@ class LessonControllerTest extends TestCase
         for ($i = 0; $i < $reservationCount; $i++)
         {
             $user = User::factory()->create();
+            UserProfile::factory()->create(['user_id' => $user->id]);
             Reservation::factory()->create(['lesson_id' => $lesson->id, 'user_id' => $user->id]);
         }
 
-        $user = User::factory()->create();
+        $user = $this->createUser();
         $this->actingAs($user->first());
 
         $response = $this->get("/lessons/{$lesson->id}");

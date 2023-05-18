@@ -14,8 +14,12 @@ class ReservationFactory extends Factory
     public function definition()
     {
         return [
-            'lesson_id' => null,
-            'user_id' => null,
+            'lesson_id' => function () {
+                return Lesson::factory()->create()->id;
+            },
+            'user_id' => function () {
+                return User::factory()->create()->id;
+            },
         ];
     }
 }
